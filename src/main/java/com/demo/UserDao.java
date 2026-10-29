@@ -4,7 +4,13 @@ import java.sql.*;
 
 public class UserDao {
 
-    private final String url = "jdbc:mysql://localhost:3306/thread_test";
+    /* serverTimezone=Asia/Shanghai：统一时区，防止时间错乱
+    * useSSL=false：关闭 SSL 加密，简化本地连接
+    * allowPublicKeyRetrieval=true：允许获取公钥，解决认证错误*/
+    private final String url = "jdbc:mysql://localhost:3306/thread_test?" +
+            "serverTimezone=Asia/Shanghai" +
+            "&useSSL=false" +
+            "&allowPublicKeyRetrieval=true";
     private final String user = "root";
     private final String pwd = "123456";
 

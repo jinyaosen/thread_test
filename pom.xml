@@ -31,7 +31,7 @@
             <version>${slf4j.version}</version>
         </dependency>
 
-        <!-- SLF4J 的简单日志实现，demo 用足够，正式项目可换 logback -->
+        <!-- SLF4J 的简单日志实现 -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
@@ -45,6 +45,21 @@
             <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- 安全地存储和验证用户密码 -->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
+        </dependency>
+
+        <!-- HikariCP 连接池 -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>5.1.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
