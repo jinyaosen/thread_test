@@ -1,5 +1,7 @@
 package com.demo;
 
+import com.zaxxer.hikari.HikariPoolMXBean;
+
 import javax.sql.DataSource;
 import java.sql.*;
 
@@ -12,27 +14,20 @@ public class UserDaoWithPool {
         this.dataSource = dataSource;
     }
 
+
     /*添加用户*/
-    public Long addUser(String username, String password) {
-        String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+    public Long addUser(String username, String password) throws SQLException {
+        String sql = "INSERT INTO users(username, password) VALUES(?, ?)";
 
-        // 注意看这里的 conn 是怎么来的！
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        Connection conn = dataSource.getConnection();      // 借出
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, username);
+        ps.setString(2, password);
+        ps.executeUpdate();
 
-            ps.setString(1, username);
-            ps.setString(2, password);
-            ps.executeUpdate();
 
-            try (ResultSet keys = ps.getGeneratedKeys()) {
-                if (keys.next()) {
-                    return keys.getLong(1);
-                }
-            }
-            return null;
-        } catch (SQLException e) {
-            throw new RuntimeException("新增用户失败", e);
-        }
+        return 1L;
+        // 故意不写 conn.close() / ps.close() → 连接永久被占
     }
 
     /*批量添加用户*/

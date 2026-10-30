@@ -2,9 +2,13 @@ package com.demo;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import lombok.Getter;
+
 import javax.sql.DataSource;
 
 public class DBUtil {
+    // 获取连接池对象
+    @Getter
     private static final HikariDataSource dataSource;
 
     static {
@@ -21,18 +25,11 @@ public class DBUtil {
 
         config.setMaximumPoolSize(20);
 
-        // 最小空闲连接数
-        config.setMinimumIdle(5);
-
-        // 连接超时时间（毫秒）：如果 20 个连接全被借走且还没还，第 21 个线程最多等 3 秒
-        config.setConnectionTimeout(3000);
+        config.setMaximumPoolSize(5);            // 池子只放 5 个，泄漏 5 次就满
+        config.setConnectionTimeout(1000);       // 1 秒拿不到连接就抛异常（默认 30 秒太长）
+        config.setLeakDetectionThreshold(2000);  // 连接借出超过 2 秒未归还 → 打印泄漏堆栈
 
         // 初始化连接池
         dataSource = new HikariDataSource(config);
-    }
-
-    // 获取连接池对象
-    public static DataSource getDataSource() {
-        return dataSource;
     }
 }
